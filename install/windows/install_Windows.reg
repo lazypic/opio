@@ -1,0 +1,14 @@
+Windows Registry Editor Version 5.00
+[HKEY_CLASSES_ROOT\opio]
+@="URL:opio Protocol"
+"URL Protocol"=""
+
+[HKEY_CLASSES_ROOT\opio\DefaultIcon]
+@="opio.exe,1"
+
+[HKEY_CLASSES_ROOT\opio\shell]
+
+[HKEY_CLASSES_ROOT\opio\shell\open]
+
+[HKEY_CLASSES_ROOT\opio\shell\open\command]
+@="\"C:\\bin\\opio.exe\" \"%1\""
