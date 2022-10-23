@@ -15,8 +15,7 @@ OpenPipelineIO에서 사용하는 웹 프로토콜입니다.
 터미널을 열고 아래처럼 명령어를 타이핑 합니다.
 
 ```bash
-$ tcsh install_CentOS7.sh // 사용자
-$ tcsh install_CentOS7_dev.sh // 개발자
+$ tcsh install_CentOS7.sh
 ```
 
 #### macOS
@@ -29,15 +28,6 @@ $ tcsh install_CentOS7_dev.sh // 개발자
 
 ```bash
 $ opio opio:///file/path/test.blend
-```
-
-### Mate Desktop 설치
-MATE Desktop은 데스크탑 환경중 하나이다. CentOS7 데스크탑 환경이 GNOME3 으로 올라가면서 과거 GNOME2 환경이 그리운 사람들이 많이 사용한다.
-
-```bash
-$ sudo yum install -y epel-release
-$ sudo yum groupinstall -y "MATE Desktop"
-$ sudo reboot
 ```
 
 ### License

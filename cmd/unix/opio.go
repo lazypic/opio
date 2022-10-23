@@ -11,52 +11,18 @@ import (
 	"os"
 	"runtime"
 	"strings"
-
-	"github.com/digital-idea/dipath"
 )
 
 const (
 	rvWindowsAppPath = "C:\\Program Files\\Shotgun\\RV-7.0\\bin\\rv.exe"
 	rvLinuxAppPath   = "/opt/rv-Linux-x86-64-7.2.0/bin/rv"
 	rvMacosAppPath   = "/Applications/RV64.app/Contents/MacOS/RV64"
-	protocol         = "dilink://"
+	protocol         = "opio://"
 )
-
-// 해당 경로를 체크하여 PROJECT, SEQ, SHOT의 환경변수 설정
-func setProjectnShot(scape string) {
-	var project, seq, shot string
-	path := scape
-	project, err := dipath.Project(path)
-	if err != nil {
-		log.Println(err)
-	}
-	seq, err = dipath.Seq(path)
-	if err != nil {
-		log.Println(err)
-	}
-	shot, err = dipath.Shot(path)
-	if err != nil {
-		log.Println(err)
-	}
-	if project != "" && seq != "" && shot != "" {
-		err = os.Setenv("PROJECT", project)
-		if err != nil {
-			log.Println(err)
-		}
-		err = os.Setenv("SEQ", seq)
-		if err != nil {
-			log.Println(err)
-		}
-		err = os.Setenv("SHOT", shot)
-		if err != nil {
-			log.Println(err)
-		}
-	}
-}
 
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.SetPrefix("dilink: ")
+	log.SetPrefix("opio: ")
 	flag.Parse()
 	if len(flag.Args()) < 1 {
 		fmt.Fprintf(os.Stdout, "명령를 실행하기 위한 인수가 충분하지 않습니다.\n")
@@ -79,7 +45,6 @@ func main() {
 	case "darwin":
 		MacOS(scape)
 	case "linux":
-		setProjectnShot(scape) //`digitalidea $PROJECT, $SEQ, $SHOT 설정`
 		Linux(scape)
 	default:
 		fmt.Fprintf(os.Stdout, "지원하지 않는 OS입니다.\n")

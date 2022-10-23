@@ -16,7 +16,7 @@ if ($status == 0) then
 [Desktop Entry]
 Name=opio
 Type=Application
-Exec=/netapp/INHouse/app/csi/opio/linux/opio %U
+Exec=/tmp/opio/opio %U
 Terminal=false
 Categories=AudioVideo;Viewer;Player;
 MimeType=x-scheme-handler/opio;

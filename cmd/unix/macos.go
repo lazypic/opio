@@ -15,45 +15,31 @@ func MacOS(scape string) {
 	case ".nk":
 		os.Setenv("NUKE_PATH", Home2Abspath("~/nuke"))
 		os.Setenv("NUKE_FONT_PATH", Home2Abspath("~/nuke/font"))
-		os.Setenv("OCIO", Home2Abspath("~/OpenColorIO-Configs/aces_1.0.3/config.ocio"))
+		os.Setenv("OCIO", Home2Abspath("~/OpenColorIO-Configs/aces_1.2/config.ocio"))
 		// 맥은 인터넷 연결되 되어있을 가능성이 높다. 항상 논커머셜로 실행한다.
-		err := exec.Command("/Applications/Nuke11.3v2/Nuke11.3v2.app/Contents/MacOS/Nuke11.3v2", "--nukex", scape).Run()
-		if err != nil {
-			log.Fatal(err)
-		}
-	case ".nknc":
-		os.Setenv("NUKE_PATH", Home2Abspath("~/nuke"))
-		os.Setenv("NUKE_FONT_PATH", Home2Abspath("~/nuke/font"))
-		os.Setenv("OCIO", Home2Abspath("~/OpenColorIO-Configs/aces_1.0.3/config.ocio"))
-		// 맥은 인터넷 연결되 되어있을 가능성이 높다. 항상 논커머셜로 실행한다.
-		err := exec.Command("/Applications/Nuke11.3v2/Nuke11.3v2.app/Contents/MacOS/Nuke11.3v2", "--nukex", "--nc", scape).Run()
+		err := exec.Command("/Applications/Nuke13.2v3/Nuke13.2v3.app/Contents/MacOS/Nuke13.2", "--nukex", scape).Run()
 		if err != nil {
 			log.Fatal(err)
 		}
 	case ".mp4", ".mov", ".jpg": // DJV 를 사용한다.
-		err := exec.Command("/Applications/DJV.app/Contents/MacOS/DJV", scape).Run()
+		err := exec.Command("/Applications/DJV2.app/Contents/MacOS/DJV2", scape).Run()
 		if err != nil {
 			log.Fatal(err)
 		}
 	case ".blend":
-		os.Setenv("OCIO", Home2Abspath("~/OpenColorIO-Configs/aces_1.0.3/config.ocio"))
+		os.Setenv("OCIO", Home2Abspath("~/OpenColorIO-Configs/aces_1.2/config.ocio"))
 		err := exec.Command(Home2Abspath("~/app/blender2.83/blender.app/Contents/MacOS/Blender"), "--python", Home2Abspath("~/blender/init.py"), scape).Run()
 		if err != nil {
 			log.Fatal(err)
 		}
 	case ".kra":
-		os.Setenv("OCIO", Home2Abspath("~/OpenColorIO-Configs/aces_1.0.3/config.ocio"))
+		os.Setenv("OCIO", Home2Abspath("~/OpenColorIO-Configs/aces_1.2/config.ocio"))
 		err := exec.Command("/Applications/krita.app/Contents/MacOS/krita", scape).Run()
 		if err != nil {
 			log.Fatal(err)
 		}
 	case ".xcf":
 		err := exec.Command("/Applications/GIMP-2.10.app/Contents/MacOS/gimp", scape).Run()
-		if err != nil {
-			log.Fatal(err)
-		}
-	case ".svg":
-		err := exec.Command("/Applications/Inkscape.app/Contents/MacOS/Inkscape", scape).Run()
 		if err != nil {
 			log.Fatal(err)
 		}

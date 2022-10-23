@@ -10,8 +10,6 @@ import (
 	"path/filepath"
 	"strings"
 	"syscall"
-
-	"github.com/digital-idea/dipath"
 )
 
 // Linux 함수는 URL로 전달받은 문자를 실행하는 함수이다.
@@ -28,9 +26,7 @@ func Linux(scape string) {
 		}
 	case ".jpg", ".png", ".exr", ".tga", ".psd", ".dpx", ".tif":
 		imglist := []string{}
-		for _, i := range strings.Split(scape, ";") {
-			imglist = append(imglist, dipath.Win2lin(i))
-		}
+		imglist = append(imglist, strings.Split(scape, ";")...)
 		imgext := []string{".jpg", ".png", ".exr", ".tga", ".psd", ".dpx", ".tif"}
 		imagelist := []string{}
 		for _, img := range imglist {
@@ -41,37 +37,36 @@ func Linux(scape string) {
 				imagelist = append(imagelist, img)
 			}
 		}
-		os.Setenv("RV_SUPPORT_PATH", "/lustre/INHouse/rv/supportPath")                            // 회사 RV 파이프라인툴을 로딩하기 위해서 필요하다.
-		os.Setenv("PKG_CONFIG_PATH", "/lustre/INHouse/Tool/opencv/v3.2.0/lib/pkgconfig")          // RV플러그인중 OpenCV를 로딩하기 위해서 필요함.
-		os.Setenv("LD_LIBRARY_PATH", "/lustre/INHouse/Tool/opencv/v3.2.0/lib")                    // RV플러그인중 OpenCV를 로딩하기 위해서 필요함.
-		os.Setenv("PYTHONPATH", "/lustre/INHouse/Tool/opencv/v3.2.0/lib/python2.7/site-packages") // import cv2, import numpy 를 로딩하기 위해서 필요하다.
-		os.Setenv("OCIO", "/lustre/INHouse/Tool/ocio/aces_1.0.3/config.ocio")                     // RV 실행시 OCIO를 로딩하기 위해서 필요하다.
+		os.Setenv("RV_SUPPORT_PATH", "/rv/supportPath")                       // 회사 RV 파이프라인툴을 로딩하기 위해서 필요하다.
+		os.Setenv("PKG_CONFIG_PATH", "/opencv/v3.2.0/lib/pkgconfig")          // RV플러그인중 OpenCV를 로딩하기 위해서 필요함.
+		os.Setenv("LD_LIBRARY_PATH", "/opencv/v3.2.0/lib")                    // RV플러그인중 OpenCV를 로딩하기 위해서 필요함.
+		os.Setenv("PYTHONPATH", "/opencv/v3.2.0/lib/python2.7/site-packages") // import cv2, import numpy 를 로딩하기 위해서 필요하다.
+		os.Setenv("OCIO", "/ocio/aces_1.0.3/config.ocio")                     // RV 실행시 OCIO를 로딩하기 위해서 필요하다.
 		err := exec.Command(rvLinuxAppPath, imagelist...).Run()
 		if err != nil {
 			log.Fatal(err)
 		}
 	case ".rv":
-		os.Setenv("RV_ENABLE_MIO_FFMPEG", "1")                                                    // Prores코덱을 위해서 활성화 한다.
-		os.Setenv("RV_SUPPORT_PATH", "/lustre/INHouse/rv/supportPath")                            // 회사 RV 파이프라인툴을 로딩하기 위해서 필요하다.
-		os.Setenv("PKG_CONFIG_PATH", "/lustre/INHouse/Tool/opencv/v3.2.0/lib/pkgconfig")          // RV플러그인중 OpenCV를 로딩하기 위해서 필요함.
-		os.Setenv("LD_LIBRARY_PATH", "/lustre/INHouse/Tool/opencv/v3.2.0/lib")                    // RV플러그인중 OpenCV를 로딩하기 위해서 필요함.
-		os.Setenv("PYTHONPATH", "/lustre/INHouse/Tool/opencv/v3.2.0/lib/python2.7/site-packages") // import cv2, import numpy 를 로딩하기 위해서 필요하다.
-		os.Setenv("OCIO", "/lustre/INHouse/Tool/ocio/aces_1.0.3/config.ocio")                     // RV 실행시 OCIO를 로딩하기 위해서 필요하다.
-		err := exec.Command(rvLinuxAppPath, dipath.Win2lin(scape)).Run()
+		os.Setenv("RV_ENABLE_MIO_FFMPEG", "1")                                     // Prores코덱을 위해서 활성화 한다.
+		os.Setenv("RV_SUPPORT_PATH", "/rv/supportPath")                            // 회사 RV 파이프라인툴을 로딩하기 위해서 필요하다.
+		os.Setenv("PKG_CONFIG_PATH", "/Tool/opencv/v3.2.0/lib/pkgconfig")          // RV플러그인중 OpenCV를 로딩하기 위해서 필요함.
+		os.Setenv("LD_LIBRARY_PATH", "/Tool/opencv/v3.2.0/lib")                    // RV플러그인중 OpenCV를 로딩하기 위해서 필요함.
+		os.Setenv("PYTHONPATH", "/Tool/opencv/v3.2.0/lib/python2.7/site-packages") // import cv2, import numpy 를 로딩하기 위해서 필요하다.
+		os.Setenv("OCIO", "/Tool/ocio/aces_1.0.3/config.ocio")                     // RV 실행시 OCIO를 로딩하기 위해서 필요하다.
+		err := exec.Command(rvLinuxAppPath, scape).Run()
 		if err != nil {
 			log.Fatal(err)
 		}
 	case ".mov":
-		os.Setenv("RV_ENABLE_MIO_FFMPEG", "1")                                                    // Prores코덱을 위해서 활성화 한다.
-		os.Setenv("RV_SUPPORT_PATH", "/lustre/INHouse/rv/supportPath")                            // 회사 RV 파이프라인툴을 로딩하기 위해서 필요하다.
-		os.Setenv("PKG_CONFIG_PATH", "/lustre/INHouse/Tool/opencv/v3.2.0/lib/pkgconfig")          // RV플러그인중 OpenCV를 로딩하기 위해서 필요함.
-		os.Setenv("LD_LIBRARY_PATH", "/lustre/INHouse/Tool/opencv/v3.2.0/lib")                    // RV플러그인중 OpenCV를 로딩하기 위해서 필요함.
-		os.Setenv("PYTHONPATH", "/lustre/INHouse/Tool/opencv/v3.2.0/lib/python2.7/site-packages") // import cv2, import numpy 를 로딩하기 위해서 필요하다.
-		os.Setenv("OCIO", "/lustre/INHouse/Tool/ocio/aces_1.0.3/config.ocio")                     // RV 실행시 OCIO를 로딩하기 위해서 필요하다.
+		os.Setenv("RV_ENABLE_MIO_FFMPEG", "1")                                     // Prores코덱을 위해서 활성화 한다.
+		os.Setenv("RV_SUPPORT_PATH", "/rv/supportPath")                            // 회사 RV 파이프라인툴을 로딩하기 위해서 필요하다.
+		os.Setenv("PKG_CONFIG_PATH", "/Tool/opencv/v3.2.0/lib/pkgconfig")          // RV플러그인중 OpenCV를 로딩하기 위해서 필요함.
+		os.Setenv("LD_LIBRARY_PATH", "/Tool/opencv/v3.2.0/lib")                    // RV플러그인중 OpenCV를 로딩하기 위해서 필요함.
+		os.Setenv("PYTHONPATH", "/Tool/opencv/v3.2.0/lib/python2.7/site-packages") // import cv2, import numpy 를 로딩하기 위해서 필요하다.
+		os.Setenv("OCIO", "/Tool/ocio/aces_1.0.3/config.ocio")                     // RV 실행시 OCIO를 로딩하기 위해서 필요하다.
 		playlist := []string{}
-		for _, i := range strings.Split(scape, ";") {
-			playlist = append(playlist, dipath.Win2lin(i))
-		}
+		playlist = append(playlist, strings.Split(scape, ";")...)
+
 		// 플레이 리스트를 받아서 입체 체크를 한다.
 		movlist := []string{}
 		isStereo := false
@@ -97,13 +92,13 @@ func Linux(scape string) {
 			log.Fatal(err)
 		}
 	case ".mp4":
-		os.Setenv("RV_ENABLE_MIO_FFMPEG", "1")                                                    // Prores코덱을 위해서 활성화 한다.
-		os.Setenv("RV_SUPPORT_PATH", "/lustre/INHouse/rv/supportPath")                            // 회사 RV 파이프라인툴을 로딩하기 위해서 필요하다.
-		os.Setenv("PKG_CONFIG_PATH", "/lustre/INHouse/Tool/opencv/v3.2.0/lib/pkgconfig")          // RV플러그인중 OpenCV를 로딩하기 위해서 필요함.
-		os.Setenv("LD_LIBRARY_PATH", "/lustre/INHouse/Tool/opencv/v3.2.0/lib")                    // RV플러그인중 OpenCV를 로딩하기 위해서 필요함.
-		os.Setenv("PYTHONPATH", "/lustre/INHouse/Tool/opencv/v3.2.0/lib/python2.7/site-packages") // import cv2, import numpy 를 로딩하기 위해서 필요하다.
-		os.Setenv("OCIO", "/lustre/INHouse/Tool/ocio/aces_1.0.3/config.ocio")                     // RV 실행시 OCIO를 로딩하기 위해서 필요하다.
-		err := exec.Command(rvLinuxAppPath, dipath.Win2lin(scape)).Run()
+		os.Setenv("RV_ENABLE_MIO_FFMPEG", "1")                                // Prores코덱을 위해서 활성화 한다.
+		os.Setenv("RV_SUPPORT_PATH", "/rv/supportPath")                       // 회사 RV 파이프라인툴을 로딩하기 위해서 필요하다.
+		os.Setenv("PKG_CONFIG_PATH", "/opencv/v3.2.0/lib/pkgconfig")          // RV플러그인중 OpenCV를 로딩하기 위해서 필요함.
+		os.Setenv("LD_LIBRARY_PATH", "/opencv/v3.2.0/lib")                    // RV플러그인중 OpenCV를 로딩하기 위해서 필요함.
+		os.Setenv("PYTHONPATH", "/opencv/v3.2.0/lib/python2.7/site-packages") // import cv2, import numpy 를 로딩하기 위해서 필요하다.
+		os.Setenv("OCIO", "/ocio/aces_1.0.3/config.ocio")                     // RV 실행시 OCIO를 로딩하기 위해서 필요하다.
+		err := exec.Command(rvLinuxAppPath, scape).Run()
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -123,12 +118,12 @@ func Linux(scape string) {
 			log.Fatal(err)
 		}
 	case ".blend":
-		err := exec.Command("/lustre/Applications/Linux/blender/blender-2.75a-linux-glibc211-x86_64/blender", scape).Run()
+		err := exec.Command("/Applications/Linux/blender/blender-2.75a-linux-glibc211-x86_64/blender", scape).Run()
 		if err != nil {
 			log.Fatal(err)
 		}
 	case ".obj":
-		err := exec.Command("/lustre/Applications/Linux/blender/blender-2.75a-linux-glibc211-x86_64/blender", "--python", "/lustre/INHouse/blender/python/loadobj.py", "--", scape).Run()
+		err := exec.Command("/Applications/Linux/blender/blender-2.75a-linux-glibc211-x86_64/blender", "--python", "/blender/python/loadobj.py", "--", scape).Run()
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -175,18 +170,7 @@ func Linux(scape string) {
 			log.Fatal(err)
 		}
 	default:
-		browser := "nautilus"
-		// 리눅스 release정보를 가지고 온다.
-		out, err := exec.Command("cat", "/etc/redhat-release").Output()
-		if err != nil {
-			log.Fatal(err)
-		}
-		release := strings.TrimSuffix(string(out), "\n")
-		// 회사는 CentOS7.x 에서는 caja를 기본 브라우저로 사용한다.
-		if strings.Contains(release, "CentOS Linux release 7.") {
-			browser = "caja"
-		}
-		err = exec.Command(browser, scape).Run()
+		err := exec.Command("nautilus", scape).Run()
 		if err != nil {
 			log.Fatal(err)
 		}
