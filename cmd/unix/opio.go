@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	rvWindowsAppPath = "C:\\Program Files\\Shotgun\\RV-7.0\\bin\\rv.exe"
+	rvWindowsAppPath = "C:\\Program Files\\ShotGrid\\RV-2022.0.0\\bin\\rv.exe"
 	rvLinuxAppPath   = "/opt/rv-Linux-x86-64-7.2.0/bin/rv"
 	rvMacosAppPath   = "/Applications/RV64.app/Contents/MacOS/RV64"
 	protocol         = "opio://"
